@@ -1,0 +1,36 @@
+---
+- name: Pull Database from "{{ env }}" to development
+  hosts: web:&{{ env }}
+  remote_user: "{{ web_user }}"
+
+  vars:
+    project_root: "{{ www_root }}/{{ site }}"
+    project_web_dir: "{{ project_root }}/current"
+    from_host: "{{hostvars[env]}}"
+    url_from: "{{ from_host.wordpress_sites.values().0.site_hosts.0.canonical }}"
+    url_to: "{{ hostvars.vagrant.wordpress_sites.values().0.site_hosts.0.canonical}}"
+
+  tasks:
+  - name: create db backup on "{{ env }}" with wp-cli
+    command: wp db export db.sql --allow-root
+    args:
+      chdir: "{{ project_web_dir }}"
+
+  - name: copy db backup from "{{env}}" to vagrant box (via vagrant synced folder)
+    fetch:
+      src: "{{project_web_dir}}/db.sql"
+      dest: ../site
+      flat: yes # copies file only, without dir structure
+
+  - name: import db backup
+    delegate_to: vagrant
+    command: wp db import db.sql
+    args:
+      chdir: "{{project_web_dir}}"
+
+  - name: search and replace from "{{url_from}}" to "{{url_to}}"
+    delegate_to: vagrant
+    command: wp search-replace '(www.)?{{url_from}}' '{{url_to}}' --allow-root --regex
+    args:
+      chdir: "{{project_web_dir}}"
+    tags: ['search-replace']
