@@ -9,12 +9,12 @@ Push and pull databases with trellis and ansible playbooks
 ### 1. Development
 
 ```
-development 192.168.50.5 ansible_connection=local
+vagrant 192.168.50.5 ansible_connection=local
 [development]
-development
+vagrant
 
 [web]
-development
+vagrant
 ```
 
 ### 2. Staging
