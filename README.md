@@ -20,22 +20,22 @@ vagrant
 ### 2. Staging
 
 ```
-production your_server_hostname
+staging your_server_hostname
 
-[production]
-production
+[staging]
+staging
 
 [web]
-production
+staging
 ```
 
 
 ### 3. Production
 ```
-staging your_server_hostname
-[staging]
-your_server_hostname
+production your_server_hostname
+[production]
+production
 
 [web]
-your_server_hostname
+production
 ```
