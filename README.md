@@ -9,7 +9,7 @@ Push and pull databases with trellis and ansible playbooks
 ### 1. Development
 
 ```
-vagrant 192.168.50.5 ansible_connection=local
+vagrant 192.168.50.5 ansible_connection=ssh ansible_user=vagrant ansible_user=vagrant ansible_ssh_private_key_file=.vagrant/machines/default/virtualbox/private_key
 [development]
 vagrant
 
